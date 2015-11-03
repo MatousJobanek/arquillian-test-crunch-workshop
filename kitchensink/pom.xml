@@ -36,63 +36,6 @@
         </license>
     </licenses>
 
-    <!-- Activate JBoss Product Maven repository.
-
-        NOTE: Configuring the Maven repository in the pom.xml file is not a recommended procedure
-        and is only done here to make it easier to use the quickstarts.
-
-        For more information about how to configure Maven for your application,
-        see the section entitled 'Use the Maven Repository'
-        in the Development Guide for Red Hat JBoss Enterprise Application Platform located here:
-
-        https://access.redhat.com/documentation/en-US/JBoss_Enterprise_Application_Platform/
-    -->
-    <repositories>
-        <repository>
-            <id>jboss-developer-staging-repository</id>
-            <url>http://jboss-developer.github.io/temp-maven-repo/</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-        <repository>
-            <id>redhat-ga-repository</id>
-            <url>https://maven.repository.redhat.com/earlyaccess/all/</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-    </repositories>
-
-    <pluginRepositories>
-        <pluginRepository>
-            <id>jboss-developer-staging-repository</id>
-            <url>http://jboss-developer.github.io/temp-maven-repo/</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </pluginRepository>
-        <pluginRepository>
-            <id>redhat-ga-repository</id>
-            <url>https://maven.repository.redhat.com/earlyaccess/all/</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </pluginRepository>
-    </pluginRepositories>
-
     <properties>
         <!-- Explicitly declaring the source encoding eliminates the following
             message: -->
@@ -103,10 +46,6 @@
         <!-- JBoss dependency versions -->
         <version.wildfly.maven.plugin>1.0.2.Final</version.wildfly.maven.plugin>
 
-        <!-- Define the version of the JBoss BOMs we want to import to specify
-            tested stacks. -->
-        <version.jboss.bom.eap>7.0.0-build-9</version.jboss.bom.eap>
-
         <!-- other plug-in versions -->
         <version.surefire.plugin>2.10</version.surefire.plugin>
         <version.war.plugin>2.1.1</version.war.plugin>
@@ -115,24 +54,6 @@
         <maven.compiler.target>1.8</maven.compiler.target>
         <maven.compiler.source>1.8</maven.compiler.source>
     </properties>
-
-    <dependencyManagement>
-        <dependencies>
-            <!-- JBoss distributes a complete set of Java EE APIs including a Bill
-                of Materials (BOM). A BOM specifies the versions of a "stack" (or a collection)
-                of artifacts. We use this here so that we always get the correct versions
-                of artifacts. Here we use the jboss-eap-javaee7-with-tools stack (you can
-                read this as the JBoss stack of the Java EE APIs, with some extras tools
-                for your project, such as Arquillian for testing)  -->
-            <dependency>
-                <groupId>org.jboss.bom</groupId>
-                <artifactId>jboss-eap-javaee7-with-tools</artifactId>
-                <version>${version.jboss.bom.eap}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
 
     <dependencies>
 
@@ -144,6 +65,7 @@
         <dependency>
             <groupId>javax.enterprise</groupId>
             <artifactId>cdi-api</artifactId>
+            <version>1.2</version>
             <scope>provided</scope>
         </dependency>
 
@@ -152,6 +74,7 @@
         <dependency>
             <groupId>org.jboss.spec.javax.annotation</groupId>
             <artifactId>jboss-annotations-api_1.2_spec</artifactId>
+            <version>1.0.0.Final</version>
             <scope>provided</scope>
         </dependency>
 
@@ -160,6 +83,7 @@
         <dependency>
             <groupId>org.jboss.spec.javax.ws.rs</groupId>
             <artifactId>jboss-jaxrs-api_2.0_spec</artifactId>
+            <version>1.0.0.Final</version>
             <scope>provided</scope>
         </dependency>
 
@@ -168,6 +92,7 @@
         <dependency>
             <groupId>org.hibernate.javax.persistence</groupId>
             <artifactId>hibernate-jpa-2.1-api</artifactId>
+            <version>1.0.0.Final</version>
             <scope>provided</scope>
         </dependency>
 
@@ -176,6 +101,7 @@
         <dependency>
             <groupId>org.jboss.spec.javax.ejb</groupId>
             <artifactId>jboss-ejb-api_3.2_spec</artifactId>
+            <version>1.0.0.Final</version>
             <scope>provided</scope>
         </dependency>
 
@@ -185,6 +111,7 @@
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-validator</artifactId>
+            <version>5.2.1.Final</version>
             <scope>provided</scope>
             <exclusions>
                 <exclusion>
@@ -199,6 +126,7 @@
         <dependency>
             <groupId>org.jboss.spec.javax.faces</groupId>
             <artifactId>jboss-jsf-api_2.2_spec</artifactId>
+            <version>2.2.11</version>
             <scope>provided</scope>
         </dependency>
 
@@ -209,6 +137,7 @@
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-jpamodelgen</artifactId>
+            <version>5.0.0.Final</version>
             <scope>provided</scope>
         </dependency>
 
@@ -217,52 +146,33 @@
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-validator-annotation-processor</artifactId>
+            <version>5.2.1.Final</version>
             <scope>provided</scope>
         </dependency>
 
-
-        <!-- Optional, but highly recommended -->
-        <!-- Arquillian allows you to test enterprise code such as EJBs and Transactional(JTA)
-            JPA from JUnit/TestNG -->
+        <!-- Needed for running tests (you may also use TestNG) -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.12</version>
+            <scope>test</scope>
         </dependency>
 
+        <!-- Arquillian allows you to test enterprise code such as EJBs and Transactional(JTA)
+            JPA from JUnit/TestNG -->
         <dependency>
             <groupId>org.jboss.arquillian.junit</groupId>
             <artifactId>arquillian-junit-container</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.jboss.arquillian.extension</groupId>
-            <artifactId>arquillian-drone-webdriver-depchain</artifactId>
-            <version>2.0.0.Alpha5</version>
-            <type>pom</type>
-        </dependency>
-        <dependency>
-            <groupId>org.jboss.arquillian.graphene</groupId>
-            <artifactId>arquillian-graphene</artifactId>
-            <version>2.1.0.Alpha3</version>
-            <type>pom</type>
-        </dependency>
-        <dependency>
-            <groupId>org.jboss.shrinkwrap.resolver</groupId>
-            <artifactId>shrinkwrap-resolver-depchain</artifactId>
-            <version>2.2.0</version>
-            <type>pom</type>
-        </dependency>
-        <dependency>
-            <groupId>org.jboss.quickstarts.eap</groupId>
-            <artifactId>jboss-kitchensink</artifactId>
-            <version>7.0.0-SNAPSHOT</version>
-            <classifier>classes</classifier>
+            <version>1.1.10.Final</version>
+            <scope>test</scope>
         </dependency>
 
+        <!-- Arquillian executes tests in a remote JBoss EAP instance -->
         <dependency>
             <groupId>org.wildfly.arquillian</groupId>
             <artifactId>wildfly-arquillian-container-remote</artifactId>
-            <version>1.0.0.Final</version>
+            <version>1.1.0.Alpha1</version>
+            <scope>test</scope>
         </dependency>
 
     </dependencies>
@@ -309,59 +219,6 @@
                         <version>${version.surefire.plugin}</version>
                         <configuration>
                             <skip>true</skip>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-
-        <profile>
-            <!-- An optional Arquillian testing profile that executes tests in your
-                JBoss EAP instance -->
-            <!-- This profile will start a new JBoss EAP instance, and execute the
-                test, shutting it down when done -->
-            <!-- Run with: mvn clean test -Parq-wildfly-managed -->
-            <id>arq-wildfly-managed</id>
-            <dependencies>
-                <dependency>
-                    <groupId>org.wildfly.arquillian</groupId>
-                    <artifactId>wildfly-arquillian-container-managed</artifactId>
-                    <scope>test</scope>
-                </dependency>
-            </dependencies>
-        </profile>
-
-        <profile>
-            <!-- An optional Arquillian testing profile that executes tests in a remote
-                JBoss EAP instance -->
-            <!-- Run with: mvn clean test -Parq-wildfly-remote -->
-            <id>arq-wildfly-remote</id>
-            <dependencies>
-                <dependency>
-                    <groupId>org.wildfly.arquillian</groupId>
-                    <artifactId>wildfly-arquillian-container-remote</artifactId>
-                    <scope>test</scope>
-                </dependency>
-            </dependencies>
-        </profile>
-
-        <profile>
-            <!-- When built in OpenShift the 'openshift' profile will be used when
-                invoking mvn. -->
-            <!-- Use this profile for any OpenShift specific customization your app
-                will need. -->
-            <!-- By default that is to put the resulting archive into the 'deployments'
-                folder. -->
-            <!-- http://maven.apache.org/guides/mini/guide-building-for-different-environments.html -->
-            <id>openshift</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <artifactId>maven-war-plugin</artifactId>
-                        <version>${version.war.plugin}</version>
-                        <configuration>
-                            <outputDirectory>deployments</outputDirectory>
-                            <warName>ROOT</warName>
                         </configuration>
                     </plugin>
                 </plugins>
