@@ -2,4 +2,10 @@
             xsi:schemaLocation="http://jboss.org/schema/arquillian http://jboss.org/schema/arquillian/arquillian_1_0.xsd">
 
 
+    <container qualifier="wildfly" default="true">
+        <configuration>
+            <property name="jbossHome">../tools/wildfly-9.0.2.Final</property>
+        </configuration>
+    </container>
+
 </arquillian>
