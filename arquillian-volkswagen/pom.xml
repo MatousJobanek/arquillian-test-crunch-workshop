@@ -8,4 +8,18 @@
     <artifactId>arquillian-volkswagen</artifactId>
     <version>1.0-SNAPSHOT</version>
 
+    <repositories>
+        <repository>
+            <id>test-crunch</id>
+            <url>file://${project.basedir}/../tools/maven-repository</url>
+            <layout>default</layout>
+        </repository>
+    </repositories>
+    <pluginRepositories>
+        <pluginRepository>
+            <id>test-crunch</id>
+            <url>file://${project.basedir}/../tools/maven-repository</url>
+            <layout>default</layout>
+        </pluginRepository>
+    </pluginRepositories>
 </project>
