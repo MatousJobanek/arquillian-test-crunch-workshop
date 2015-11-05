@@ -51,6 +51,6 @@ public class MemberRepositoryTest {
 
         Member found = memberRepository.findByEmail("john@doe.com");
         Assert.assertNotNull(found);
-        Assert.assertEquals(member.getName(), found.getName());
+        Assert.assertEquals("Dummy name", found.getName());
     }
 }
