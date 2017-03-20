@@ -1,0 +1,215 @@
+body{
+    background: rgba(17,17,17,1) url("../img/arquillian_icon_256px.png") no-repeat 0 0;
+}
+
+.red{
+    color: #ffc500;
+}
+
+
+.green{
+    color: greenyellow;
+}
+
+.greengreen{
+    color: green;
+}
+
+.yellow{
+    color: yellow;
+}
+
+.white{
+    color: white;
+}
+
+.blue{
+    color: #13daec;
+}
+
+.xml, .dependency, .groupid, .artifactid, .version, .type, .classifier{
+    color: orange;
+}
+.xml:before{
+    content: "<";
+}
+.xml:after{
+    content: ">";
+}
+.subxml:before, .groupid:before, .artifactid:before, .version:before, .type:before, .classifier:before{
+    content: "";
+    margin-left: 50px;
+}
+
+.dependency:before{
+    content: "<dependency>";
+}
+.dependency:after{
+    content: "</dependency>";
+}
+.groupid:before{
+    content: "<groupid>";
+}
+.groupid:after{
+    content: "</groupid>";
+}
+.artifactid:before{
+    content: "<artifactid>";
+}
+.artifactid:after{
+    content: "</artifactid>";
+}
+.version:before{
+    content: "<version>";
+}
+.version:after{
+    content: "</version>";
+}
+.type:before{
+    content: "<type>";
+}
+.type:after{
+    content: "</type>";
+}
+.classifier:before{
+    content: "<classifier>";
+}
+.classifier:after{
+    content: "</classifier>";
+}
+
+.lifecycle{
+    border-style: none;
+    background-color: rgba(0,0,0,0);
+}
+
+div.seam {
+    background: #007777 !important;
+}
+
+div.codi {
+    background: #995500 !important;
+}
+
+div.deltaspike {
+    background: #993377 !important;
+}
+
+div.other-framework {
+    background: #333333 !important;
+}
+
+div.inactive {
+    opacity: 0.25;
+}
+
+div.module-box {
+    display: inline-block;
+    font-size: 0.6em;
+    padding: 10px;
+    line-height: 1em;
+    box-shadow: 2px 2px 6px 0 rgba(0,0,0,0.2);
+    border-radius: 10px;
+    width: 140px;
+}
+
+div.invisible {
+    visibility: hidden;
+}
+
+div.module-box.title {
+    display: inline-block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 25px;
+}
+
+div.code-annotation {
+    font-size: 0.55em;
+    text-align: left;
+    padding-bottom: 0;
+    margin-bottom: -8px;
+    line-height: 1em;
+    width: 90%;
+    color: #808080;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+pre.code-overlay {
+    box-shadow: none;
+    position: absolute;
+    width: 100%;
+}
+
+pre[class~=code-overlay] + pre:not([class~=code-overlay]) {
+    margin-top: 25px;
+}
+
+code.code_title{
+    font-size:28px;
+}
+
+/* demo */
+
+/* hide scrollbar */
+#your-tweets-wrapper {
+    overflow: hidden;
+}
+#your-tweets {
+    overflow-y: scroll;
+    width: 100%;
+    height: 500px;
+    padding-right: 20px;
+}
+
+div.tweet {
+    background: rgba(0,0,0,0.4);
+    border-radius: 15px;
+    text-align: left;
+    margin: 10px;
+}
+
+span.tweet-username {
+    font-size: 0.8em;
+    color: #666666;
+    display: inline-block;
+    padding-left: 15px;
+}
+
+p.tweet-text {
+    font-size: 0.9em;
+    display: inline-block;
+    width: 80%;
+    vertical-align: top;
+    padding-top: 15px;
+}
+
+.tweet img {
+    height: 80px;
+    width: 80px;
+    margin:20px !important;
+    border-radius: 10px;
+    border-color: #999999 !important;
+}
+
+input#your-tweets-filter {
+    background: none;
+    border: none;
+    border-radius: 15px;
+    text-align: center;
+    width: 100%;
+    font-size: 0.7em;
+    color: #999999;
+}
+
+input#your-tweets-filter:focus {
+    outline: none;
+}
+
+#agorava-twitter-demo-at {
+    font-size: 0.8em;
+    opacity: 0.5;
+    margin-top: 15px;
+}

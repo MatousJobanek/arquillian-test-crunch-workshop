@@ -1,0 +1,783 @@
+<!doctype html>
+<html lang="en">
+
+    <head>
+        <meta charset="utf-8">
+
+        <title>Arquillian</title>
+
+        <meta name="description" content="Arquillian">
+        <meta name="author" content="Matouš Jobánek">
+
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+        <link rel="stylesheet" href="css/reveal.min.css">
+        <link rel="stylesheet" href="css/theme/night.css" id="theme">
+        <link rel="stylesheet" href="css/arquillian.css" id="arq">
+
+        <!-- For syntax highlighting -->
+        <link rel="stylesheet" href="lib/css/zenburn.css">
+
+        <!-- If the query includes 'print-pdf', use the PDF print sheet -->
+        <script>
+            document.write('<link rel="stylesheet" href="css/print/' + (window.location.search.match(/print-pdf/gi) ? 'pdf' : 'paper') + '.css" type="text/css" media="print">');
+        </script>
+
+        <!--[if lt IE 9]>
+        <script src="lib/js/html5shiv.js"></script>
+        <![endif]-->
+        <style>
+
+        </style>
+    </head>
+
+    <body>
+        <div class="reveal">
+
+            <!-- Any section element inside of this container is displayed as a slide -->
+            <div class="slides">
+
+                <section id="title">
+                    <section id="hello">
+                        <h1><strong>Greeting, Earthlings!</strong></h1>
+                    </section>
+                    <section id="requirements">
+                        <h2><span class="red">Requirements</span></h2>
+                        <br>
+                        <ul>
+                            <li class="fragment">JDK</li>
+                            <li class="fragment">Maven</li>
+                            <li class="fragment">Git</li>
+                        </ul>
+                        <br>
+                        <br>
+
+                        <h2 class="fragment"><span class="green">Nice to have</span></h2>
+                        <br>
+                        <ul>
+                            <li class="fragment">IDE</li>
+                        </ul>
+                    </section>
+                    <section data-transition="fade" id="yes2">
+                        <h2><span class="green">If YES</span></h2>
+                        <br>
+                        <span class="fragment" style="font-size: xx-large"><b>Copy and extract:</b>
+                        <br><code data-trim
+                                  class="java"><span
+                                    class="blue">arquillian-test-crunch-workshop.zip</span></code></span>
+                        <br><br>
+                        <span class="fragment" style="font-size: xx-large"><b>Extract:</b>
+                        <br><code data-trim
+                                  class="java"><span class="blue">arquillian-test-crunch-workshop/resources/<br>maven-repository.zip</span></code></span>
+                        <br><br>
+                        <span class="fragment" style="font-size: xx-large"><b>Extract:</b>
+                        <br><code data-trim
+                                  class="java"><span class="blue">arquillian-test-crunch-workshop/resources/<br>wildfly-9.0.2.Final.zip</span></code></span>
+                        <br><br>
+                        <br>
+                        <h4 class="fragment">Import arquillian-test-crunch-workshop into your IDE</h4>
+                    </section>
+                    <section id="NO">
+                        <h2><span class="red">If NOT</span></h2>
+                        <br>
+                        <h4 class="fragment">Install them</h4>
+                        <br>
+                        <h4 class="fragment">Copy and extract the same files as mentioned</h4>
+                        <br>
+
+                        <h2 class="fragment"><span class="green">or</span></h2>
+                        <h4 class="fragment">Just watch</h4>
+                    </section>
+                </section>
+
+                <section id="me">
+                    <h2>Matous Jobanek</h2>
+                    <br>
+                    <ul>
+                        <li class="fragment">Quality Engineer at Red Hat</li>
+                        <li class="fragment">Arquillian cotribution:
+                            <ul>
+                                <li>Drone</li>
+                                <li>ShrinkWrap Resolver</li>
+                                <li>Graphene (Screenshooter)</li>
+                                <li>Recorder</li>
+                                <li>...</li>
+                            </ul>
+                        </li>
+                        <li class="fragment">Previously: QE for Weld, DeltaSpike, GWT, Errai</li>
+                        <br>
+                        <li class="fragment">Mountains, nature, beer, ...</li>
+                    </ul>
+                </section>
+
+
+                <section id="agenda">
+                    <h2>Agenda</h2>
+
+                    <div>
+                        <ol>
+                            <li class="fragment">Introduction</li>
+                            <br>
+                            <li class="fragment">Arquillian core</li>
+                            <ul>
+                                <li class="fragment">Client x In-container tests
+                                    <ul>
+                                        <li class="fragment">Container adapters</li>
+                                        <li class="fragment">ShrinkWrap - basics</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                            <br>
+                            <li class="fragment">Arquillian UI tests
+                                <ul>
+                                    <li class="fragment">Drone</li>
+                                    <li class="fragment">Graphene</li>
+                                </ul>
+                            </li>
+                            <br>
+                            <li class="fragment">Arquillian in-container integration tests
+                                <ul>
+                                    <li class="fragment">ShrinkWrap</li>
+                                    <li class="fragment">ShrinkWrap Resolver</li>
+                                </ul>
+                            </li>
+                            <br>
+                            <li class="fragment">Write you own extension (Volkswagen)</li>
+                        </ol>
+                    </div>
+                </section>
+
+                <section id="basics">
+
+                    <section data-transition="fade" id="basics-title">
+                        <h2>Basics</h2>
+                    </section>
+
+                    <section data-transition="fade" id="basics-types">
+                        <h2>What types of test?</h2>
+                        <br>
+                        <div>
+                            <ul>
+                                <li class="fragment">Unit</li>
+                                <li class="fragment">Integration</li>
+                                <li class="fragment">Functional</li>
+                            </ul>
+                        </div>
+                    </section>
+
+                    <section data-transition="fade" id="basics-expectations">
+                        <h2>Tests should be</h2>
+                        <br>
+
+                        <h3 class="fragment"><span class="red">Portable</span> to any supported container</h3>
+                        <br>
+
+                        <h3 class="fragment">Executable from both <span
+                                class="red">IDE</span> and <span class="red">build tool</span>
+                        </h3>
+
+                    </section>
+                </section>
+
+                <section id="arquillian-core">
+
+                    <section id="arquillian-core-title">
+                        <h1>Arquillian <span class="red">Core</span></h1>
+
+                        <h2>so you can rule the code, not the bugs!</h2>
+                    </section>
+
+                    <section data-transition="fade" id="arquillian-core-types">
+                        <h1>Arquillian Core</h1>
+
+                        <h2><span class="green">is</span></h2>
+
+                        <h1><span class="red">Testing platform</span></h1>
+
+                        <h2>Middleware for your tests</h2>
+                    </section>
+
+                    <section data-transition="fade" id="arquillian-core-provides">
+                        <h1>Arquillian Core</h1>
+
+                        <h3><span class="green">is</span></h3>
+
+                        <h2>Modular, Extensible, Flexible</h2>
+                    </section>
+
+                    <section data-transition="fade" id="arquillian-core-test-extensions">
+                        <h1><span class="red">Test</span> Extensions</h1>
+
+                        <h2>SPI for test runners</h2>
+                    </section>
+
+                    <section data-transition="fade" id="arquillian-core-test-runners">
+                        <h1>Test <span class="red">Runners</span></h1>
+
+                        <h3>JUnit · TestNG · Spock · JBehave · Cucumber · Thucydides</h3>
+                    </section>
+                    <section id="pray">
+                        <h2>Pray to the demo gods</h2>
+                        <img src="img/pray.jpg" style="height: 600px">
+                    </section>
+
+                    <section id="demo-arquillian-core">
+                        <h1>Demo 1</h1> <span style="margin-left: 100%; white-space: nowrap">git tag: <span
+                            class="green">rev_01</span></span><br>
+                        <ul>
+                            <li class="fragment">Get familiar with the project</li>
+                            <br>
+                            <li class="fragment">
+                                <tr>Maven dependency
+                                    <br>
+                                <span class="dependency"><br>
+                                <span class="groupid"><span class="white">org.jboss.arquillian.junit</span></span><br>
+                                <span class="artifactid"><span
+                                        class="white">arquillian-junit-container</span></span><br>
+                                <span class="version"><span class="white">1.1.10.Final</span></span><br>
+                                </span>
+                                </tr>
+                            </li>
+                            <br>
+                            <li class="fragment">
+                                <tr>
+                                    Annotation <span class="yellow"><code data-trim
+                                                                          class="java">@RunWith(Arquillian.class)</code></span>
+                                </tr>
+                            </li>
+                        </ul>
+                    </section>
+
+                    <section data-transition="fade" id="arquillian-core-test-container">
+                        <h1><span class="red">Container</span> Extensions</h1>
+
+                        <h2>SPI for runtime providers</h2>
+                    </section>
+
+                    <section data-transition="fade" id="arquillian-core-test-adapter">
+                        <h1><span class="red">Container</span> Adapters</h1>
+
+                        <h3>WildFly · JBoss EAP · GlassFish · TomEE · Jetty · Tomcat ·
+                            WebSphere · WebLogic · Spring · Weld · OSGi · Android · iOS</h3>
+                    </section>
+                </section>
+
+                <section id="demo-in-container">
+                    <section id="demo-arquillian-container">
+                        <h1>Demo 2</h1> <span style="margin-left: 100%; white-space: nowrap">git tag: <span
+                            class="green">rev_02</span></span><br>
+                        <ul>
+                            <li class="fragment">
+                                <tr>Add container adapter dependency
+                                    <br>
+                                <span class="dependency"><br>
+                                <span class="groupid"><span class="white">org.wildfly.arquillian</span></span><br>
+                                <span class="artifactid"><span
+                                        class="white">wildfly-arquillian-container-remote</span></span><br>
+                                <span class="version"><span class="white">1.1.0.Alpha1</span></span><br>
+                                </span>
+                                </tr>
+                            </li>
+                            <br>
+                            <li class="fragment">
+                                <tr>
+                                    Create <span class="yellow"><code data-trim
+                                                                      class="java">@Deployment</code></span>
+                                    with ShrinkWrap
+                                </tr>
+                            </li>
+                        </ul>
+                    </section>
+                    <section data-transition="fade" id="run-modes">
+                        <h2>Run modes</h2>
+                        <br>
+
+                        <h3 class="fragment"><span class="red">In-container</span> mode</h3>
+                        <h4 class="fragment"><span class="code"><span class="yellow">@Deployment(testable = true)</span></span>
+                        </h4>
+                        <br>
+                        <br>
+
+                        <h3 class="fragment"><span class="red">Client</span> mode</h3>
+                        <h4 class="fragment"><span class="code"><span
+                                class="yellow">@Deployment(testable = false)</span></span></h4>
+                        <h5 class="fragment">or</h5>
+                        <h4 class="fragment"><span class="code"><span class="yellow">@RunAsClient</span></span></h4>
+                    </section>
+
+                    <section data-transition="fade" id="container-types">
+                        <h2>Container Types</h2>
+                        <br>
+
+                        <h3 class="fragment"><span class="red">Remote</span></h3>
+
+                        <p class="fragment">Separate JVM</p>
+
+                        <p class="fragment">Lifecycle is NOT managed by Arquillian</p>
+                        <br>
+
+                        <h3 class="fragment"><span class="red">Managed</span></h3>
+
+                        <p class="fragment">Separate JVM</p>
+
+                        <p class="fragment">Lifecycle IS managed by Arquillian</p>
+                        <br>
+
+                        <h3 class="fragment"><span class="red">Embeded</span></h3>
+
+                        <p class="fragment">Same JVM</p>
+
+                        <p class="fragment">Lifecycle is mostly likely managed by Arquillian</p>
+                    </section>
+                </section>
+
+                <section id="how-it-works">
+                    <section data-transition="fade" id="how-it-works-title">
+                        <h2>How does this all <span class="red">work?</span></h2>
+                    </section>
+                    <section data-transition="fade" id="how-it-works-1">
+                        <img src="img/1_select_a_container_wildfly.png"
+                             style="border-style: none; background-color: rgba(0,0,0,0); box-shadow: none"/>
+                    </section>
+                    <section data-transition="fade" id="how-it-works-2">
+                        <img src="img/2_start_container_single_wildfly.png"
+                             style="border-style: none; background-color: rgba(0,0,0,0); box-shadow: none"/>
+                    </section>
+                    <section data-transition="fade" id="how-it-works-3">
+                        <img src="img/3_package_test_archive.png"
+                             style="border-style: none; background-color: rgba(0,0,0,0); box-shadow: none"/>
+                    </section>
+                    <section data-transition="fade" id="how-it-works-4">
+                        <img src="img/4_run_test_in_container.png"
+                             style="border-style: none; background-color: rgba(0,0,0,0); box-shadow: none"/>
+                    </section>
+                    <section data-transition="fade" id="how-it-works-5">
+                        <img src="img/5_test_result.png"
+                             style="border-style: none; background-color: rgba(0,0,0,0); box-shadow: none"/>
+                    </section>
+                    <section data-transition="fade" id="how-it-works-6">
+                        <img src="img/6_disconnect_container.png"
+                             style="border-style: none; background-color: rgba(0,0,0,0); box-shadow: none"/>
+                    </section>
+                </section>
+
+                <section id="drone">
+                    <section data-transition="fade" id="drone-title">
+                        <h1>Arquillian Drone</h1>
+                        <img src="img/drone_400.png"
+                             style="border-style: none; background-color: rgba(0,0,0,0); box-shadow: none"/>
+                    </section>
+                    <section data-transition="fade" id="drone-expl">
+                        <h2>Arquillian Drone</h2>
+                        <br>
+                        <h4 class="fragment">Brings the power of <span class="red">Selenium WebDriver</span> into the
+                            Arquillian universe</h4>
+                        <br>
+                        <h4 class="fragment">Selenium WebDriver provides a language how to <span
+                                class="red">communicate</span>
+                            with a browser</h4>
+                    </section>
+                    <section data-transition="fade" id="drone-why">
+                        <h2>Why not plain WebDriver?</h2>
+                        <br>
+                        <b class="fragment">Drone provides:</b><br><br>
+                        <ul>
+                            <li class="fragment"><span class="green">Life cycle management</span> of the browser</li>
+                            <br>
+                            <li class="fragment">Interaction with <span class="green">deployments</span></li>
+                            <br>
+                            <li class="fragment">Simple usage of <span class="green">multiple browsers</span> in a
+                                single test
+                            </li>
+                            <br>
+                            <li class="fragment">Configuration kept on a single place - <span class="green">Arquillian.xml</span>
+                            </li>
+                            <br>
+                            <li class="fragment">Integration with <span class="green">mobile</span> based browsers</li>
+                            <br>
+                            <li class="fragment">and more...</li>
+                        </ul>
+                    </section>
+                    <section data-transition="fade" id="drone-browsers">
+                        <h2>Supported <span class="red">browsers</span></h2>
+                        <br>
+
+                        <h3>Firefox · Opera · Chrome · IE · Safari · HtmlUnit · PhantomJS</h3>
+                    </section>
+                </section>
+
+                <section id="demo-drone">
+                    <h1>Demo 3</h1> <span style="margin-left: 100%; white-space: nowrap">git tag: <span class="green">rev_03</span></span><br>
+                    <ul>
+                        <li class="fragment">
+                            <tr>Maven dependency
+                                <br>
+                                <span class="dependency"><br>
+                                <span class="groupid"><span
+                                        class="white">org.jboss.arquillian.extension</span></span><br>
+                                <span class="artifactid"><span
+                                        class="white">arquillian-drone-webdriver-depchain</span></span><br>
+                                <span class="version"><span class="white">2.0.0.Alpha5</span></span><br>
+                                    <span class="type"><span class="white">pom</span></span><br>
+                                </span>
+                            </tr>
+                        </li>
+                        <br>
+                        <li class="fragment">
+                            <tr>
+                                Configure within Arquillian.xml
+                            </tr>
+                        </li>
+                        <br>
+                        <li class="fragment">
+                            <tr>
+                                Get WebDriver: <span class="yellow"><code data-trim
+                                                                          class="java">@Drone</code></span>
+                            </tr>
+                        </li>
+                        <br>
+                        <li class="fragment">
+                            <tr>
+                                Get URL: <span class="yellow"><code data-trim
+                                                                    class="java">@ArquillianResource</code></span>
+                            </tr>
+                        </li>
+                        <br>
+                        <li class="fragment">
+                            <tr>
+                                Open the browser: <span class="yellow"><code data-trim
+                                                                             class="java">WebDriver.get(url.toString())</code></span>
+                            </tr>
+                        </li>
+                    </ul>
+                </section>
+
+                <section id="graphene">
+                    <section data-transition="fade" id="graphene-title">
+                        <h1>Arquillian Graphene 2</h1>
+                    </section>
+                    <section data-transition="fade" id="graphene-expl">
+                        <h2>Arquillian Graphene 2</h2>
+                        <br>
+                        <h4 class="fragment">Set of extensions for <span class="red">Selenium WebDriver</span></h4>
+                        <br>
+                        <h4 class="fragment">Focused on <span class="red">rapid development</span> and <span
+                                class="red">usability</span> in Java environment.</h4>
+                    </section>
+                    <section data-transition="fade" id="graphene-why">
+                        <h2>Why not plain WebDriver?</h2>
+                        <br>
+                        <b class="fragment">Graphene 2 provides:</b><br><br>
+                        <ul>
+
+                            <li class="fragment">Improved <span class="green">readability</span> with
+                                <span class="green">fluent API</span></li>
+                            <br>
+                            <li class="fragment"><span class="green">Waiting API</span> and <span class="green">request guarding</span>
+                            </li>
+                            <br>
+                            <li class="fragment">Integrates with <span class="green">Arquillian Core</span> and <span
+                                    class="green">Arquillian Drone</span>
+                            </li>
+                            <br>
+                            <li class="fragment">Consistent level of abstraction using <span
+                                    class="green">Page Objects</span>
+                                and <span class="green">Page Fragments</span></li>
+                            <br>
+                            <li class="fragment">and more...</li>
+                        </ul>
+                    </section>
+                </section>
+
+                <section id="demo-graphene">
+                    <h1>Demo 4</h1> <span style="margin-left: 100%; white-space: nowrap">git tag: <span class="green">rev_04</span></span><br>
+                    <ul>
+                        <li class="fragment">
+                            <tr>Maven dependency
+                                <br>
+                                <span class="dependency"><br>
+                                <span class="groupid"><span
+                                        class="white">org.jboss.arquillian.graphene</span></span><br>
+                                <span class="artifactid"><span
+                                        class="white">arquillian-graphene</span></span><br>
+                                <span class="version"><span class="white">2.1.0.Alpha3</span></span><br>
+                                    <span class="type"><span class="white">pom</span></span><br>
+                                </span>
+                            </tr>
+                        </li>
+                        <br>
+                    </ul>
+                </section>
+
+                <section id="integration-in-container">
+                    <section id="integration-title">
+                        <h1>Integration<br> in-container tests</h1>
+                    </section>
+                    <section id="shrinkwrap">
+                        <h2>ShrinkWrap</h2>
+                        <h4 class="fragment">Provides Java <span class="red">API to create archives</span>
+                            in Java</h4>
+
+                        <br>
+
+                        <h2 class="fragment">ShrinkWrap Resolver</h2>
+                        <h4 class="fragment">Provides Java <span class="red">API to obtain artifacts</span> from Maven
+                            repository system</h4>
+                        <h4 class="fragment">Allows to <span class="red">reuse</span> a configuration already specified
+                            in <span class="red">pom.xml file</span></h4>
+
+                        <br>
+
+                        <h2 class="fragment">ShrinkWrap Descriptors</h2>
+                        <h4 class="fragment">Provides Java <span class="red">API for creating and modifying Java EE deployment descriptors</span>
+                            on the fly</h4>
+
+                    </section>
+                </section>
+
+                <section id="demo-integration">
+                    <h1>Demo 5</h1> <span style="margin-left: 100%; white-space: nowrap">git tag: <span class="green">rev_05</span></span><br>
+                    <ul>
+                        <li class="fragment">
+                            <tr>Switch to Kitchensink quickstart
+                            </tr>
+                        </li>
+                        <br>
+                        <li class="fragment">
+                            <tr>Verify all necessary Maven dependencies
+                            </tr>
+                        </li>
+                        <br>
+                        <li class="fragment">
+                            <tr>Create an Arquillian test
+                            </tr>
+                        </li>
+                        <br>
+                        <li class="fragment">
+                            <tr>Create and deploy deployment
+                            </tr>
+                        </li>
+                        <br>
+                        <li class="fragment">
+                            <tr>Inject, register and verify
+                            </tr>
+                        </li>
+                        <br>
+                    </ul>
+                </section>
+
+                <section id="combine">
+                    <section id="combine-title">
+                        <h2>Combine both approaches within one test?</h2><span
+                            style="margin-left: 100%; white-space: nowrap">git tag: <span
+                            class="green">rev_06</span></span><br>
+                    </section>
+                    <section data-transition="fade" id="combine-how-it-works-3">
+                        <img src="img/3_package_test_archive.png"
+                             style="border-style: none; background-color: rgba(0,0,0,0); box-shadow: none"/>
+                    </section>
+                    <section data-transition="fade" id="combine-how-it-works-4">
+                        <img src="img/4_run_test_in_container.png"
+                             style="border-style: none; background-color: rgba(0,0,0,0); box-shadow: none"/>
+                    </section>
+                    <section data-transition="fade" id="demo-swr">
+                        <h2>Demo 6</h2> <span style="margin-left: 100%; white-space: nowrap">git tag: <span
+                            class="green">rev_06</span></span><br>
+                        <ul>
+                            <li class="fragment">
+                                <tr>Add ShrinkWrap Resolver Maven dependency
+                                    <br>
+                                <span class="dependency"><br>
+                                <span class="groupid"><span
+                                        class="white">org.jboss.shrinkwrap.resolver</span></span><br>
+                                <span class="artifactid"><span
+                                        class="white">shrinkwrap-resolver-depchain</span></span><br>
+                                <span class="version"><span class="white">2.2.0</span></span><br>
+                                    <span class="type"><span class="white">pom</span></span><br>
+                                </span>
+                                </tr>
+                            </li>
+                            <br>
+                            <li class="fragment">Retrieve the Arquillian Drone dependency with all transitive
+                                dependencies
+                            </li>
+                            <br>
+                            <li class="fragment">Add them into the web archive</li>
+                            <br>
+                        </ul>
+                    </section>
+                    <section data-transition="fade" id="demo-swr-2">
+                        <h2>Demo 6</h2> <span style="margin-left: 100%; white-space: nowrap">git tag: <span
+                            class="green">rev_06</span></span><br>
+                        <ul>
+                            <li>
+                                <tr>Add Kithensink quickstart Maven dependency
+                                    <br>
+                                <span class="dependency"><br>
+                                <span class="groupid"><span
+                                        class="white">org.jboss.quickstarts.eap</span></span><br>
+                                <span class="artifactid"><span
+                                        class="white">jboss-kitchensink<</span></span><br>
+                                <span class="version"><span class="white">7.0.0</span></span><br>
+                                    <span class="classifier"><span class="white">classes</span></span><br>
+                                </span>
+                                </tr>
+                            </li>
+                            <br>
+                            <li class="fragment">Verify if the user has been added
+                            </li>
+                            <br>
+                        </ul>
+                    </section>
+                </section>
+
+                <section id="extension">
+                    <section id="extension-title">
+                        <h1>Write your own <span class="red">extension</span></h1>
+
+                        <h2 class="fragment">Volkswagen</h2>
+                    </section>
+                    <section id="extension-spi">
+                        <h2>What are the options when writing an extension</h2>
+                        <ul>
+                            <li class="fragment">Create <span class="red">observers</span></li>
+                            <li class="fragment">Create new <span class="red">events</span></li>
+                            <li class="fragment"><span class="red">Inject</span> objects into the tests by:</li>
+                            <ul>
+                                <li class="fragment">ResourceProvider</li>
+                                <li class="fragment">TestEnricher</li>
+                            </ul>
+                            <li class="fragment">Register new <span class="red">services</span></li>
+                            <li class="fragment">Use <span class="red">arquillian.xml</span> configuration</li>
+                            <li class="fragment">and more...</li>
+                        </ul>
+                        <br><br><br>
+                        <h4 class="fragment">Event traffic? Run maven build with:<br><br>
+                            <code data-trim
+                                  class="java">-Darquillian.debug=true</code></h4>
+                    </section>
+
+                    <section id="demo-ext">
+                        <h2>Demo 7 - Volkswagen</h2> <span style="margin-left: 100%; white-space: nowrap">git tag: <span
+                            class="green">rev_07</span></span><br>
+                        <ul>
+                            <li class="fragment">
+                                <tr>Add Arquillian SPI dependency
+                                    <br>
+                                <span class="dependency"><br>
+                                <span class="groupid"><span
+                                        class="white">org.jboss.arquillian.container</span></span><br>
+                                <span class="artifactid"><span
+                                        class="white">arquillian-container-test-spi</span></span><br>
+                                <span class="version"><span class="white">1.1.10.Final</span></span><br>
+                                </span>
+                                </tr>
+                            </li>
+                            <br>
+                            <li class="fragment">Create observer and reset all thrown exceptions</li>
+                            <br>
+                            <li class="fragment">Create VW extension by implementing the LoadableExtension</li>
+                            <br>
+                            <li class="fragment">Register the observer</li>
+                            <br>
+                            <li class="fragment">Register the whole extension by creating a file named:<br>
+                                <span class="green">org.jboss.arquillian.core.spi.LoadableExtension</span><br>
+                                within a directory:<br>
+                                <span class="green">src/main/resources/META-INF/services</span>
+                            </li>
+                            <br>
+                        </ul>
+                    </section>
+                    <section id="demo-ext-2">
+                        <h2>Demo 7 - Volkswagen</h2> <span style="margin-left: 100%; white-space: nowrap">git tag: <span
+                            class="green">rev_07</span></span><br>
+                        <ul>
+                            <li>
+                                <tr>Use the extension
+                                    <br>
+                                <span class="dependency"><br>
+                                <span class="groupid"><span
+                                        class="white">org.jboss.arquillian</span></span><br>
+                                <span class="artifactid"><span
+                                        class="white">arquillian-volkswagen</span></span><br>
+                                <span class="version"><span class="white">1.0-SNAPSHOT</span></span><br>
+                                </span>
+                                </tr>
+                            </li>
+                            <br>
+                        </ul>
+                    </section>
+                </section>
+                <section id="thank-you">
+                    <h1>Thank you</h1>
+                    <br>
+
+                    <h3><a href="http://arquillian.org">arquillian.org</a></h3><br>
+
+                    <h3><a href="http://github.com/arquillian">github.com/arquillian</a></h3><br>
+
+                    <h3><a href="http://discuss.arquillian.org/">discuss.arquillian.org</a></h3><br>
+
+                    <h3><a href="https://github.com/MatousJobanek/arquillian-test-crunch-workshop">github.com/MatousJobanek/<br>arquillian-test-crunch-workshop</a>
+                    </h3>
+
+
+                </section>
+            </div>
+        </div>
+
+        <script src="lib/js/head.min.js"></script>
+        <script src="js/reveal.min.js"></script>
+        <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+
+<script>
+
+
+
+	// Full list of configuration options available here:
+            // https://github.com/hakimel/reveal.js#configuration
+            Reveal.initialize({
+                controls: false,
+                progress: true,
+                history: true,
+                center: true,
+                theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+                transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+                transitionSpeed: 'fast', // default/fast/slow
+
+                // Parallax scrolling
+                // parallaxBackgroundImage: 'https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg',
+                // parallaxBackgroundSize: '2100px 900px',
+
+                // Optional libraries used to extend on reveal.js
+                dependencies: [
+//                    { src: 'socket.io/socket.io.js', async: true },
+//                    { src: 'plugin/notes-server/client.js', async: true },
+                    {src: 'lib/js/classList.js', condition: function() {
+                            return !document.body.classList;
+                        }},
+                    {src: 'plugin/markdown/marked.js', condition: function() {
+                            return !!document.querySelector('[data-markdown]');
+                        }},
+                    {src: 'plugin/markdown/markdown.js', condition: function() {
+                            return !!document.querySelector('[data-markdown]');
+                        }},
+                    {src: 'plugin/highlight/highlight.js', async: true, callback: function() {
+                            hljs.initHighlightingOnLoad();
+                        }},
+                    {src: 'plugin/zoom-js/zoom.js', async: true, condition: function() {
+                            return !!document.body.classList;
+                        }},
+                    {src: 'plugin/notes/notes.js', async: true, condition: function() {
+                            return !!document.body.classList;
+                        }}
+                ],
+            });
+</script>
+
+
+    </body>
+</html>
